@@ -1,0 +1,56 @@
+{
+  "homepage": "http://DuongTanPhat.github.io/poll-client",
+  "name": "polling-app-client",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "antd": "^4.10.2",
+    "antd-img-crop": "^3.14.0",
+    "axios": "^0.21.1",
+    "react-audio-player": "^0.16.1",
+    "react-infinite-scroller": "^1.2.4",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "4.0.1",
+    "semantic-ui-css": "^2.4.1",
+    "semantic-ui-react": "^2.0.3",
+    "sockjs-client": "^1.5.1",
+    "stompjs": "^2.3.3"
+  },
+  "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.3%",
+      "not ie 11",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      ">0.3%",
+      "not ie 11",
+      "not dead",
+      "not op_mini all"
+    ]
+  },
+  "devDependencies": {
+    "babel-plugin-import": "^1.13.3",
+    "customize-cra": "^1.0.0",
+    "gh-pages": "^3.2.3",
+    "react": "^16.9.0",
+    "react-app-rewire-less": "^2.1.3",
+    "react-app-rewired": "^2.1.8",
+    "react-dom": "^16.9.0"
+  }
+}

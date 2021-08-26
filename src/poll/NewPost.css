@@ -1,0 +1,81 @@
+.new-poll-container {
+    max-width: 520px;
+    margin: 0 auto;
+    margin-top: 40px;
+}
+
+.create-poll-form-button {
+    width: 100%;
+}
+
+.create-poll-form-button[disabled], .create-poll-form-button[disabled]:hover, .create-poll-form-button[disabled]:focus {
+    opacity: 0.6;
+    color: #fff;
+    background-color: #1890ff;
+    border-color: #1890ff;
+}
+
+
+.dynamic-delete-button {
+    cursor: pointer;
+    position: relative;
+    top: 4px;
+    font-size: 24px;
+    color: #999;
+    transition: all .3s;
+}
+.dynamic-delete-button-poll {
+    cursor: pointer;
+    position: relative;
+    top: 4px;
+    font-size: 24px;
+    color: #999;
+    transition: all .3s;
+    float: right;
+}
+
+.optional-choice {
+    width: calc(100% - 35px);
+    margin-right: 8px;
+}
+.optional-textchoice {
+    width: calc(80% - 35px);
+    /* margin-right: 8px; */
+}
+.ant-input-group-addon{
+    padding: 0 !important;
+}
+.button-upload{
+    height: 66px;
+    margin: 0px 0px 3.2px 2px;
+}
+.ant-upload-list-item{
+    margin-top: 0;
+}
+
+.choice{
+    width:80%
+}
+
+.dynamic-delete-button:hover {
+    color: #777;
+}
+
+.dynamic-delete-button[disabled] {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.poll-form-row {
+    margin-bottom: 20px;
+}
+
+.poll-form-row input, .poll-form-row textarea {
+    margin-bottom: 4px;
+}
+
+.antd-demo-dynamic-option img {
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+  }
