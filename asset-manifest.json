@@ -1,0 +1,24 @@
+{
+  "files": {
+    "main.css": "/poll-client/static/css/main.c644aeb1.chunk.css",
+    "main.js": "/poll-client/static/js/main.6b3d2c31.chunk.js",
+    "main.js.map": "/poll-client/static/js/main.6b3d2c31.chunk.js.map",
+    "runtime-main.js": "/poll-client/static/js/runtime-main.92481835.js",
+    "runtime-main.js.map": "/poll-client/static/js/runtime-main.92481835.js.map",
+    "static/css/2.aea9172f.chunk.css": "/poll-client/static/css/2.aea9172f.chunk.css",
+    "static/js/2.2d4757ad.chunk.js": "/poll-client/static/js/2.2d4757ad.chunk.js",
+    "static/js/2.2d4757ad.chunk.js.map": "/poll-client/static/js/2.2d4757ad.chunk.js.map",
+    "index.html": "/poll-client/index.html",
+    "static/css/2.aea9172f.chunk.css.map": "/poll-client/static/css/2.aea9172f.chunk.css.map",
+    "static/css/main.c644aeb1.chunk.css.map": "/poll-client/static/css/main.c644aeb1.chunk.css.map",
+    "static/js/2.2d4757ad.chunk.js.LICENSE.txt": "/poll-client/static/js/2.2d4757ad.chunk.js.LICENSE.txt",
+    "static/media/poll.04e627bb.svg": "/poll-client/static/media/poll.04e627bb.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.92481835.js",
+    "static/css/2.aea9172f.chunk.css",
+    "static/js/2.2d4757ad.chunk.js",
+    "static/css/main.c644aeb1.chunk.css",
+    "static/js/main.6b3d2c31.chunk.js"
+  ]
+}
