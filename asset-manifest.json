@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/poll-client/static/css/main.141eaf75.chunk.css",
-    "main.js": "/poll-client/static/js/main.65219887.chunk.js",
-    "main.js.map": "/poll-client/static/js/main.65219887.chunk.js.map",
+    "main.js": "/poll-client/static/js/main.c8d5b93e.chunk.js",
+    "main.js.map": "/poll-client/static/js/main.c8d5b93e.chunk.js.map",
     "runtime-main.js": "/poll-client/static/js/runtime-main.92481835.js",
     "runtime-main.js.map": "/poll-client/static/js/runtime-main.92481835.js.map",
     "static/css/2.c058e17a.chunk.css": "/poll-client/static/css/2.c058e17a.chunk.css",
@@ -19,6 +19,6 @@
     "static/css/2.c058e17a.chunk.css",
     "static/js/2.ea220e3c.chunk.js",
     "static/css/main.141eaf75.chunk.css",
-    "static/js/main.65219887.chunk.js"
+    "static/js/main.c8d5b93e.chunk.js"
   ]
 }
