@@ -640,7 +640,7 @@ class NewPoll extends Component {
         if (info.fileList.length === 0) {
             const polls = this.state.polls.slice();
             deleteImage(polls[indexPoll].photo);
-            polls[indexPoll].photo = null;
+            polls[indexPoll].photo = '';
             this.setState({
                 polls: polls
             });

@@ -3,10 +3,11 @@ import './App.css';
 import {
   Route,
   withRouter,
-  Switch
+  Switch,
+  Link
 } from 'react-router-dom';
 
-import { getCurrentUser } from '../util/APIUtils';
+import { getCurrentUser,getTopTag } from '../util/APIUtils';
 import { ACCESS_TOKEN } from '../constants';
 
 import PostList from '../poll/PostList';
@@ -18,13 +19,15 @@ import AppHeader from '../common/AppHeader';
 import NotFound from '../common/NotFound';
 import LoadingIndicator from '../common/LoadingIndicator';
 import PrivateRoute from '../common/PrivateRoute';
+import {RedoOutlined} from '@ant-design/icons';
 // import PrivateRoute2 from '../common/PrivateRoute2';
-import { notification } from 'antd';
+import { notification,Affix,Card, Button } from 'antd';
 import { Layout } from 'antd';
 import NewGroup from '../group/NewGroup';
 import SiderMenu from '../common/SiderMenu';
 import EditGroup from '../group/EditGroup';
 import ChangePassword from '../user/ChangePassword';
+import Verification from '../user/Verification';
 const { Header, Sider, Content } = Layout;
 //const { Content } = Layout;
 
@@ -32,6 +35,7 @@ const App = (props) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [toptag,setTopTag]=useState([]);
   notification.config({
     placement: 'topRight',
     top: 70,
@@ -40,7 +44,7 @@ const App = (props) => {
 
   useEffect(() => {
     loadCurrentUser();
-    //console.log(currentUser);
+    loadTopTag();
   }, [])
   const readNoti = function(){
     currentUser.notificationCount--;
@@ -57,7 +61,14 @@ const App = (props) => {
         setIsLoading(false);
       });
   }
-
+  const loadTopTag = function () {
+    getTopTag()
+      .then(response => {
+        setTopTag(response);
+      }).catch(error => {
+        setTopTag([]);
+      });
+  }
 
   const handleLogout = function (redirectTo = "/", notificationType = "success", description = "You're successfully logged out.") {
     localStorage.removeItem(ACCESS_TOKEN);
@@ -83,6 +94,11 @@ const App = (props) => {
   if (isLoading) {
     return <LoadingIndicator />
   }
+  const tagViews = [];
+  toptag.forEach((tag,index)=>{
+    const uri = encodeURIComponent(tag.name);
+    tagViews.push(<p key={index}><Link to={"/search/"+uri} key={index}>{tag.name}</Link>  <span style={{float:'right'}}>{tag.count}</span></p>)
+  })
   return (
 <Layout className="app-container">
       <Header>
@@ -110,10 +126,14 @@ const App = (props) => {
                 render={(props) => <PostList isAuthenticated={isAuthenticated}
                   currentUser={currentUser} handleLogout={handleLogout} type="HOME" {...props} />}>
               </Route>
+              <Route exact path="/poll-client"
+                render={(props) => <PostList isAuthenticated={isAuthenticated}
+                  currentUser={currentUser} handleLogout={handleLogout} type="HOME" {...props} />}>
+              </Route>
               <Route path="/login"
                 render={(props) => <Login onLogin={handleLogin} type="login" {...props} />}></Route>
-                <Route path="/auth/:code"
-                render={(props) => <Login onLogin={handleLogin} type="confirm" {...props} />}></Route>
+                <Route path="/auth"
+                render={(props) => <Verification onLogin={handleLogin} type="confirm" {...props} />}></Route>
               <Route path="/signup" component={Signup}></Route>
               <Route path="/users/:username"
                 render={(props) => <Profile isAuthenticated={isAuthenticated} handleLogout={handleLogout} key={props.match.params.username} currentUser={currentUser} {...props} />}>
@@ -138,6 +158,14 @@ const App = (props) => {
             </Switch>
           </div>
         </Content>
+<Affix className="affix" offsetTop={220}>
+        <Card title={"Top "+toptag.length+" Tag rank"} style={{ width: 300}} extra={<Button type="text" shape="circle" className="poll-info" icon={<RedoOutlined />} onClick={loadTopTag}></Button>}>
+      {tagViews}
+      {/* <p>{toptag[2].name}  Num: {toptag[2].count}</p>
+      <p>{toptag[3].name}  Num: {toptag[3].count}</p>
+      <p>{toptag[4].name}  Num: {toptag[4].count}</p> */}
+    </Card>
+        </Affix>
       </Layout>
     </Layout>
   );

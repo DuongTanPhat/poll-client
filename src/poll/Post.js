@@ -7,7 +7,7 @@ import { getAvatarColor } from '../util/Colors';
 import { formatDateTime } from '../util/Helpers';
 import { API_BASE_URL, ACCESS_TOKEN, POLL_CHOICE_MAX_LENGTH, POLL_LIST_SIZE } from '../constants';
 import { Image, Badge, List } from 'antd';
-import { Popover, Upload } from 'antd';
+import { Popover, Upload,Tag } from 'antd';
 import { Form, Input, Col, notification, Switch, Row, Tooltip } from 'antd';
 import { HeartOutlined, HeartTwoTone, MessageOutlined, UploadOutlined, MoreOutlined, DeleteOutlined, MinusOutlined, PlusOutlined } from '@ant-design/icons';
 import { Radio, Button } from 'antd';
@@ -614,6 +614,15 @@ class Post extends Component {
             />)
         })
         const time = getTime2(this.props.post.publicDate);
+        var question = this.props.post.question;
+        var tag = question.match(/#\S+/g);
+        const tagView = [];
+        if(tag!=null)tag.forEach((t,index)=>{
+            const uri = encodeURIComponent(t);
+            question = question.replace(t,"");
+            
+            tagView.push(<Tag key={index}><Link to={"/search/"+uri} key={index}>{t}</Link></Tag>)
+        })
         return (
             <>
                 <Card style={{ marginBottom: 30 }} className="poll-content"
@@ -624,7 +633,7 @@ class Post extends Component {
                 >
 
                     <div className="poll-header">
-                        <Popover placement="right" title="Tùy chọn" content={<ManagerPost isUserStorage={this.props.post.isUserStorage} isOwner={this.props.currentUser != null && (this.props.currentUser.username === this.props.post.createdBy.username)} onUpdatePost={this.onClickUpdateName} onDeletePost={this.props.onDeletePost} deleteFollowPost={this.props.deleteFollowPost} onFollowPost={this.props.onFollowPost} postIndex={this.props.postIndex} />} trigger="click">
+                        <Popover placement="right" title="Tùy chọn" content={<ManagerPost isUserStorage={this.props.post.isUserStorage} isOwner={this.props.currentUser != null && (this.props.currentUser.username === this.props.post.createdBy.username)} onUpdatePost={this.onClickUpdateName} onReportPost={this.props.onReportPost} onDeletePost={this.props.onDeletePost} deleteFollowPost={this.props.deleteFollowPost} onFollowPost={this.props.onFollowPost} postIndex={this.props.postIndex} />} trigger="click">
                             <Button type="text" shape="circle" className="poll-info" icon={<MoreOutlined />}></Button>
                         </Popover>
                         <div className="poll-creator-info">
@@ -657,15 +666,15 @@ class Post extends Component {
                                 {this.props.post.showCase === 1 ? "Bí mật" : null}
                                 {this.props.post.showCase === 2 ? "Riêng tư" : null}
                                 {this.props.post.showCase === 3 ? "Công khai" : null}
-                                {this.props.post.showCase === 4 ? "Giới hạn người" : null}
-                                {this.props.post.showCase === 5 ? <Popover placement="right" id="grouplist" title="Danh sách nhóm" content={<InfomationGroups list={this.props.post.groupResponses}></InfomationGroups>} trigger="click"><Button type="text" className="poll-show-case-button">Nhóm</Button></Popover> : null}
+                                {this.props.post.showCase === 4 && <span style={{cursor:"pointer"}} onClick={() => this.props.handleShowListNoVoted(this.props.post.id)}>Giới hạn người</span>}
+                                {this.props.post.showCase === 5 && <Popover placement="right" id="grouplist" title="Danh sách nhóm" content={<InfomationGroups list={this.props.post.groupResponses}></InfomationGroups>} trigger="click"><Button type="text" className="poll-show-case-button">Nhóm</Button></Popover>}
                             </span>
 
 
                         </div>
 
                         <div className="poll-question">
-                            {this.state.isUpdateName ? <TextArea value={this.state.valueName} onChange={this.onChangeName}></TextArea> : <>{this.props.post.question}</>}
+                            {this.state.isUpdateName ? <TextArea value={this.state.valueName} onChange={this.onChangeName}></TextArea> : <>{question}{tagView}</>}
                         </div>
                         {this.state.isUpdateName && <Button style={{ marginBottom: 15 }} onClick={this.updateName}>Update</Button>}
                         {postView}
@@ -716,7 +725,8 @@ function ManagerPost(props) {
         <div>
             {props.isOwner&&<Button type="primary" style={{ marginBottom: "10px" }} block onClick={() => props.onUpdatePost(props.postIndex)}>Cập nhật</Button>}
             {!props.isUserStorage?<Button type="primary" style={{ marginBottom: "10px" }} block onClick={() => props.onFollowPost(props.postIndex)}>Lưu trữ</Button>:<Button type="primary" style={{ marginBottom: "10px" }} block onClick={() => props.deleteFollowPost(props.postIndex)}>Hủy Lưu trữ</Button>}
-            <Button danger block onClick={() => props.onDeletePost(props.postIndex)}>Delete post</Button>
+            {props.isOwner&&<Button danger block onClick={() => props.onDeletePost(props.postIndex)}>Delete post</Button>}
+            {!props.isOwner&&<Button danger block onClick={() => props.onReportPost(props.postIndex)}>Report</Button>}
         </div>
     );
 }

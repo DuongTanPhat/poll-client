@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { login,confirmMail } from '../../util/APIUtils';
+import { login } from '../../util/APIUtils';
 import './Login.css';
 import { Link } from 'react-router-dom';
 import { ACCESS_TOKEN } from '../../constants';
@@ -14,32 +14,6 @@ class LoginForm extends Component {
     constructor(props) {
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);
-    }
-    componentDidMount(){
-        console.log(this.props.type)
-        if(this.props.type === "confirm"){
-            this.props.history.push("/login");
-            confirmMail(this.props.match.params.code)
-            .then(response => {
-                notification.success({
-                    message: 'Polling App',
-                    description: 'Your accout is Active. Welcome to website!'
-                });   
-                this.props.history.push("/login");
-            }).catch(error => {
-                if(error.status === 401) {
-                    notification.error({
-                        message: 'Polling App',
-                        description: 'Your Username or Password is incorrect. Please try again!'
-                    });                    
-                } else {
-                    notification.error({
-                        message: 'Polling App',
-                        description: error.message || 'Sorry! Something went wrong. Please try again!'
-                    });                                            
-                }
-            });
-        }
     }
     handleSubmit = values => {
                 const loginRequest = Object.assign({}, values);

@@ -34,6 +34,7 @@ class AppHeader extends Component {
     this._isMounted=false;
   }
   loadUserNotification = (page= 0, size = 5) => {
+    if (this.props.currentUser) {
     getUserNotification(page, size)
       .then(response => {
         console.log(response)
@@ -44,7 +45,7 @@ class AppHeader extends Component {
           last: response.last
         })}
       }).catch(error => {
-      });
+      });}
   }
   handleMenuClick = ({ key })=> {
     if (key === "logout") {
@@ -85,6 +86,7 @@ class AppHeader extends Component {
     this.setState({visible: flag});
   }
   onSearch = value => {
+    value = encodeURIComponent(value);
     if (value === "") this.props.history.push("/");
     else this.props.history.push("/search/" + value);
     console.log(value)

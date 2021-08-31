@@ -77,6 +77,10 @@
 .container{
   max-width: 800px;
 }
+.affix{
+  position: fixed;
+  right: 20px;
+}
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
@@ -86,6 +90,9 @@
 @media (max-width: 1100px) {
   .sider {
   display: none;
+  }
+  .affix {
+    display: none;
   }
   }
 .App-header {

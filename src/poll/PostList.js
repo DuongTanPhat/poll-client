@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { getAllPolls, getUserCreatedPolls, getUserVotedPolls, getOnePolls, getAllPollsOfGroup, getAllUserVotedChoice, deletePost } from '../util/APIUtils';
+import { getAllPolls, getUserCreatedPolls, getUserVotedPolls, getOnePolls, getAllPollsOfGroup,getAllUserNoVoted, getAllUserVotedChoice, deletePost } from '../util/APIUtils';
 import Post from './Post';
-import { Avatar } from 'antd';
+import { Avatar, Input } from 'antd';
 import { getAvatarColor } from '../util/Colors';
-import { castVote, commentPost,deleteSavePost,savePost,getUserSavedPolls, getAllComment, replyComment,deleteComment,deleteReply } from '../util/APIUtils';
+import { castVote,reportPost, commentPost,deleteSavePost,savePost,getUserSavedPolls, getAllComment, replyComment,deleteComment,deleteReply } from '../util/APIUtils';
 import { deleteVote, deleteChoice, addChoice, endPoll, castLike, getAllPollsSearch, updatePostName } from '../util/APIUtils';
 import LoadingIndicator from '../common/LoadingIndicator';
 import { Button, notification, Modal, List } from 'antd';
@@ -42,6 +42,16 @@ class PostList extends Component {
             stompClient: null,
             check: 0,
             visiblePost: false,
+
+            visibleListnoVoted: false,
+            novotedUsers: [],
+            pagenoVoted: 0,
+            currentPostId: 0,
+            isLoading3: false,
+            last3: false,
+
+            visibleReportPost: false,
+            reasonReport: '',
 
             comments: [],
             submittingComment: [],
@@ -446,7 +456,7 @@ class PostList extends Component {
                 // console.log(this.state.check)
                 if (this.state.page === response.page && this.state.check === 0) {
                     if (this._isMounted) {
-                        //console.log("setState1")
+                        console.log("setState1")
                         this.setState({
                             posts: posts.concat(response.content),
                             page: response.page,
@@ -471,7 +481,7 @@ class PostList extends Component {
                 }
                 else if (this.state.page !== response.page) {
                     if (this._isMounted) {
-                        //console.log("setState2")
+                        console.log("setState2")
                         this.setState({
                             posts: posts.concat(response.content),
                             page: response.page,
@@ -774,6 +784,14 @@ class PostList extends Component {
             })
         }
     }
+    showModalReportPost = (postIndex) => {
+        if (this._isMounted) {
+            this.setState({
+                visibleReportPost: true,
+                currentPostIndex: postIndex
+            })
+        }
+    }
     handleDeletePostSubmit = () => {
         const post = this.state.posts[this.state.currentPostIndex];
         if (!this.props.isAuthenticated) {
@@ -810,6 +828,43 @@ class PostList extends Component {
         if (this._isMounted) {
             this.setState({
                 visiblePost: false
+            });
+        }
+    }
+    handleReportPostSubmit = () => {
+        if (!this.props.isAuthenticated) {
+            this.props.history.push("/login");
+            notification.info({
+                message: 'Polling App',
+                description: "Please login to delete.",
+            });
+            return;
+        }
+        reportPost(this.state.posts[this.state.currentPostIndex].id,this.state.reasonReport)
+            .then(response => {
+                if (this._isMounted) {
+                    this.setState({
+                        currentPostIndex: 0,
+                        reasonReport: ''
+                    });
+                }
+                notification.success({
+                    message: 'Polling App',
+                    description: response.message || 'Successfully!!'
+                });
+            }).catch(error => {
+                if (error.status === 401) {
+                    this.props.handleLogout('/login', 'error', 'You have been logged out. Please login to vote');
+                } else {
+                    notification.error({
+                        message: 'Polling App',
+                        description: error.message || 'Sorry! Something went wrong. Please try again!'
+                    });
+                }
+            });
+        if (this._isMounted) {
+            this.setState({
+                visibleReportPost: false
             });
         }
     }
@@ -914,6 +969,9 @@ class PostList extends Component {
     handleLoadMoreUserVoted = () => {
         this.loadListVoted(this.state.currentChoiceId, this.state.pageVoted + 1)
     }
+    handleLoadMoreUsernoVoted = () => {
+        this.loadListNoVoted(this.state.currentPostId, this.state.pagenoVoted + 1)
+    }
     handleVoteChange(event, pollIndex, postIndex) {
         const currentVotes = this.state.currentVotes.slice();
         currentVotes[postIndex][pollIndex] = event.target.value;
@@ -1001,6 +1059,14 @@ class PostList extends Component {
             })
         }
     }
+    handleCancelReportPost = () => {
+        if (this._isMounted) {
+            this.setState({
+                visibleReportPost: false,
+                currentPostIndex: 0
+            })
+        }
+    }
     handleCancelListVoted = () => {
         if (this._isMounted) {
             this.setState({
@@ -1008,6 +1074,16 @@ class PostList extends Component {
                 votedUsers: [],
                 isLoading2: false,
                 last2: false
+            })
+        }
+    }
+    handleCancelListnoVoted = () => {
+        if (this._isMounted) {
+            this.setState({
+                visibleListnoVoted: false,
+                novotedUsers: [],
+                isLoading3: false,
+                last3: false
             })
         }
     }
@@ -1061,6 +1137,43 @@ class PostList extends Component {
                 }
             });
     }
+    loadListNoVoted = (postId, page = 0, size = USER_LIST_SIZE) => {
+        if (this._isMounted) {
+            this.setState({
+                isLoading3: true
+            })
+        }
+
+        getAllUserNoVoted(postId, page, size)
+            .then(response => {
+                const novotedUsers = this.state.novotedUsers.slice();
+                if (this.state.last3 !== true) {
+                    if (this._isMounted) {
+                        this.setState({
+                            novotedUsers: novotedUsers.concat(response.content),
+                            currentPostId: postId,
+                            pagenoVoted: page,
+                            last3: response.last,
+                            isLoading3: false
+                        });
+                    }
+                }
+            }).catch(error => {
+                if (error.status === 401) {
+                    this.props.handleLogout('/login', 'error', 'You have been logged out. Please login to vote');
+                } else {
+                    notification.error({
+                        message: 'Polling App',
+                        description: error.message || 'Sorry! Something went wrong. Please try again!'
+                    });
+                }
+                if (this._isMounted) {
+                    this.setState({
+                        isLoading3: false
+                    })
+                }
+            });
+    }
     showModalListVoted = (choiceId, page = 0, size = USER_LIST_SIZE) => {
         if (this._isMounted) {
             this.setState({
@@ -1069,6 +1182,15 @@ class PostList extends Component {
         }
         this.loadListVoted(choiceId, page, size);
     }
+    showModalNoVoted = (postId, page = 0, size = USER_LIST_SIZE) => {
+        if (this._isMounted) {
+            this.setState({
+                visibleListnoVoted: true
+            })
+        }
+        this.loadListNoVoted(postId, page, size);
+    }
+
 
     showModal = (event, postIndex, pollIndex) => {
         if (this._isMounted) {
@@ -1335,6 +1457,11 @@ class PostList extends Component {
 
 
     }
+    onChangeReason=(event)=>{
+        this.setState({
+            reasonReport: event.target.value
+        })
+    }
     render() {
         const style = {
             height: 40,
@@ -1373,6 +1500,7 @@ class PostList extends Component {
                 onFollowPost={this.onFollowPost}
                 deleteFollowPost={this.deleteFollowPost}
                 onDeletePost={this.showModalDeletePost}
+                onReportPost={this.showModalReportPost}
                 onLikePost={this.onLikePost}
                 currentUser={this.props.currentUser}
                 key={post.id}
@@ -1382,6 +1510,7 @@ class PostList extends Component {
                 addAChoice={this.addAChoice}
                 handleDeleteChoiceSubmit={this.showModal}
                 handleShowListVoted={this.showModalListVoted}
+                handleShowListNoVoted={this.showModalNoVoted}
                 handleDeleteVoteSubmit={this.handleDeleteVoteSubmit}
                 onEndPoll={this.onEndPoll}
                 handleVoteChange={this.handleVoteChange}
@@ -1483,6 +1612,22 @@ class PostList extends Component {
                 </Modal>
                 <Modal
                     title="Confirm your action"
+                    visible={this.state.visibleReportPost}
+                    onOk={this.handleReportPostSubmit}
+                    onCancel={this.handleCancelReportPost}
+                    footer={[
+                        <Button key="back" onClick={this.handleCancelReportPost}>
+                            Return
+                        </Button>,
+                        <Button key="submit" type="primary" onClick={this.handleReportPostSubmit}>
+                            Submit
+                        </Button>,
+                    ]}
+                ><p>Are you want Report this post?</p>
+                <Input placeholder="Reason..." value={this.state.reasonReport} onChange={this.onChangeReason} onPressEnter={this.handleReportPostSubmit}></Input>
+                </Modal>
+                <Modal
+                    title="Confirm your action"
                     visible={this.state.visibleCommentDelete}
                     onOk={this.handleDeleteCommentSubmit}
                     onCancel={this.handleCancelComment}
@@ -1540,6 +1685,53 @@ class PostList extends Component {
                     }
                     {
                         this.state.isLoading2 ?
+                            <LoadingIndicator /> : null
+                    }
+                </Modal>
+                <Modal
+                    title="Danh sách user chưa vote"
+                    centered
+                    visible={this.state.visibleListnoVoted}
+                    onCancel={this.handleCancelListnoVoted}
+
+                    footer={[
+                        <Button key="back" onClick={this.handleCancelListnoVoted}>
+                            Return
+                        </Button>,
+                    ]}
+                >
+                    <List
+                        itemLayout="horizontal"
+                        dataSource={this.state.novotedUsers}
+                        renderItem={item => (
+                            <List.Item>
+                                <List.Item.Meta
+                                    avatar={item.photo == null ?
+                                        <Avatar className="poll-creator-avatar2"
+                                            style={{ backgroundColor: getAvatarColor(item.name) }} >
+                                            {item.name[0].toUpperCase()}
+                                        </Avatar> : <Avatar className="poll-creator-avatar2"
+                                            //src={API_BASE_URL + "/file/getImage/" + item.photo} 
+                                            src={"https://drive.google.com/uc?export=view&id="+item.photo}
+                                            >
+                                        </Avatar>
+                                    }
+                                    title={<div>{item.name} <span style={{ color: '#657786' }}>@{item.username}</span></div>}
+                                    // description={<span>Voted: {item.count}</span>}
+                                />
+                            </List.Item>
+                        )}
+                    />
+                    {
+                        !this.state.isLoading3 && !this.state.last3 ? (
+                            <div className="load-more-polls">
+                                <Button type="dashed" onClick={this.handleLoadMoreUsernoVoted} disabled={this.state.isLoading3}>
+                                    <PlusOutlined /> Load more
+                                </Button>
+                            </div>) : null
+                    }
+                    {
+                        this.state.isLoading3 ?
                             <LoadingIndicator /> : null
                     }
                 </Modal>

@@ -8,7 +8,6 @@ import { Menu, Button, Popover,Modal,notification } from 'antd';
 import { getAllGroups,deleteGroup,leaveGroup } from '../util/APIUtils';
 import { GROUP_LIST_SIZE } from '../constants';
 import { PlusOutlined, MoreOutlined } from '@ant-design/icons';
-import InfiniteScroll from 'react-infinite-scroller';
 class SiderMenu extends Component {
   _isMounted = false;
   constructor(props) {
@@ -18,6 +17,7 @@ class SiderMenu extends Component {
       isLoading: false,
       last: false,
       visibleLeave: false,
+      page: 0,
       visible: false,
       currentGroupIndex: 0
     }
@@ -33,11 +33,12 @@ class SiderMenu extends Component {
       const list = this.state.listGroups.slice();
       getAllGroups(page, GROUP_LIST_SIZE)
         .then(response => {
-          //console.log(response)
+          // console.log(response)
           if (this._isMounted) {
             this.setState({
               listGroups: list.concat(response.content),
               isLoading: false,
+              page: response.page,
               last: response.last
             })
           }
@@ -186,15 +187,6 @@ handleLeaveGroupSubmit=()=>{
       ]}
   ><p>Are you want leave this group?</p>
   </Modal>
-      <div ref={(ref) => this.scrollParentRef = ref}>
-        <InfiniteScroll
-          initialLoad={false}
-          pageStart={0}
-          loadMore={this.loadListGroup}
-          hasMore={true}
-          // hasMore={true}
-          useWindow={false}
-        >
           <Menu theme="light" mode="inline" className="scrollbox-content" selectedKeys={[location.pathname]}>
             <Menu.Item key="/group/new" icon={<PlusOutlined />}> <Link to="/group/new"> Tạo Group</Link></Menu.Item>
             <Menu.Divider />
@@ -210,8 +202,9 @@ handleLeaveGroupSubmit=()=>{
 
 
             </Menu.ItemGroup>
+            {!this.state.last&&<Menu.Item key="more" onClick={()=>this.loadListGroup(this.state.page+1)}>Load more</Menu.Item>}
           </Menu>
-        </InfiniteScroll></div></>
+       </>
     );
   }
 

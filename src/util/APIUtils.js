@@ -69,8 +69,16 @@ export function getOnePolls(id) {
 }
 export function updatePostName(postId,name) {
     return request({
-        url: API_BASE_URL + "/polls/" + postId+"?name="+name,
-        method: 'PUT'
+        url: API_BASE_URL + "/polls/" + postId,
+        method: 'PUT',
+        body:name
+    });
+}
+export function reportPost(postId,text) {
+    return request({
+        url: API_BASE_URL + "/polls/" + postId+"/report",
+        method: 'POST',
+        body:text
     });
 }
 export function getAllPollsOfGroup(code,page, size) {
@@ -97,6 +105,23 @@ export function getAllUserVotedChoice(choice,page, size) {
 
     return request({
         url: API_BASE_URL + "/polls/voted?choice="+choice+"&page=" + page + "&size=" + size,
+        method: 'GET'
+    });
+}
+export function getAllUserNoVoted(post,page, size) {
+    page = page || 0;
+    size = size || USER_LIST_SIZE;
+
+    return request({
+        url: API_BASE_URL + "/polls/novoted?post="+post+"&page=" + page + "&size=" + size,
+        method: 'GET'
+    });
+}
+export function getTopTag(top) {
+    top = top || 5;
+
+    return request({
+        url: API_BASE_URL + "/polls/toptag?top="+top,
         method: 'GET'
     });
 }

@@ -61,10 +61,11 @@ class Signup extends Component {
             message: 'Polling App',
             description: "Thank you! Please check your mail!",
         });     
+        this.props.history.push("/auth");
         signup(signupRequest)
         .then(response => {
-                 
-            this.props.history.push("/login");
+                 console.log("ok")
+            // this.props.history.push("/auth");
         }).catch(error => {
             notification.error({
                 message: 'Polling App',

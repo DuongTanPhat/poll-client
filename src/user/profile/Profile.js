@@ -33,7 +33,7 @@ class Profile extends Component {
             fileList: [],
             isEdit: false,
             valueName: "",
-            stompClient: null
+            stompClient: null,
         }
         this.loadUserProfile = this.loadUserProfile.bind(this);
     }
@@ -49,12 +49,18 @@ class Profile extends Component {
         changeAvatar(formData)
             .then(res => {
                 //console.log(res.data);
-                
+                const user = this.state.user;
+                this.setState({
+                    user:{
+                        ...user,
+                        photo: res.id
+                    }
+                })
                 notification.success({
                     message: 'Polling App',
                     description: `Avatar file uploaded successfully`,
                 });
-                window.location = window.location.href;
+                //window.location = window.location.href;
             });
         if (this._isMounted) {
             this.setState({
@@ -253,6 +259,7 @@ class Profile extends Component {
                                                 // listType="picture-card"
                                                 fileList={this.state.fileList}
                                                 beforeUpload={this.beforeUpload}
+                                                style={{display:"none"}}
                                             >
                                                 <CameraOutlined style={{ position: "absolute", marginLeft: "52px", marginTop: "52px", zIndex: "1" }} />
                                                 {this.state.user.photo == null ?
@@ -264,11 +271,8 @@ class Profile extends Component {
                                                         //src={API_BASE_URL+"/file/getImage/" + this.state.user.photo} 
                                                         src={"https://drive.google.com/uc?export=view&id="+this.state.user.photo}
                                                         />)}
-                                                {/* <Avatar className="user-avatar-circle" src={"http://localhost:5000/api/file/getImage/" + this.state.user.photo} /> */}
-                                                {/* <Avatar className="user-avatar-circle" style={{ backgroundColor: getAvatarColor(this.state.user.name)}}>
-                                        {this.state.user.name[0].toUpperCase()}
-                                    </Avatar> */}
                                             </Upload>
+                                            
                                         </ImgCrop> : <>{this.state.user.photo == null ?
                                             (<Avatar className="user-avatar-circle"
                                                 style={{ backgroundColor: getAvatarColor(this.state.user.name) }} >
@@ -279,11 +283,7 @@ class Profile extends Component {
                                                 //src={API_BASE_URL+"/file/getImage/" + this.state.user.photo} 
                                                 />)}</>}
                                 </div>
-                                {/* <ReactAudioPlayer
-                                    src="http://localhost:5000/api/file/getAudio/Part_1.mp3"
-                                    controls
-                                /> */}
-
+                                
                                 <div className="user-summary">
                                     <div className="full-name">{this.state.isEdit ? <><Form><Form.Item validateStatus={this.state.validateStatus}
                             help={this.state.errorMsg}><Input value={this.state.valueName} onChange={(event) => this.onChangeName(event, this.validateName)} onPressEnter={this.enter}></Input><Button type="text" shape="circle" onClick={this.onEdit} style={{ float: "right",position: "fixed" }} icon={<CloseOutlined />}></Button></Form.Item></Form></> : <>{this.state.user.name}{this.state.user.username === this.props.currentUser.username && <Button type="text" shape="circle" onClick={this.onEdit} style={{ float: "right" }} icon={<EditOutlined />}></Button>}</>}</div>

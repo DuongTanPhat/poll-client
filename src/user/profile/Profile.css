@@ -37,7 +37,9 @@
     text-align: center;
     padding-top: 20px;
 }
-
+.ant-upload-list-text{
+    display: none;
+}
 @media (min-width: 576px) {
     .user-details {
         text-align: left;
