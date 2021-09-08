@@ -16,9 +16,6 @@ import { CameraOutlined, EditOutlined,CloseOutlined } from '@ant-design/icons';
 import { 
     NAME_MIN_LENGTH, NAME_MAX_LENGTH, API_BASE_URL,ACCESS_TOKEN
 } from '../../constants';
-// import 'antd/es/modal/style';
-// import 'antd/es/slider/style';
-// import Form from 'antd/lib/form/Form';
 const TabPane = Tabs.TabPane;
 class Profile extends Component {
     _isMounted = false;

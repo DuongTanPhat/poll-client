@@ -6,10 +6,8 @@ import {
   Switch,
   Link
 } from 'react-router-dom';
-
 import { getCurrentUser,getTopTag } from '../util/APIUtils';
 import { ACCESS_TOKEN } from '../constants';
-
 import PostList from '../poll/PostList';
 import NewPost from '../poll/NewPost';
 import Login from '../user/login/Login';
@@ -20,7 +18,6 @@ import NotFound from '../common/NotFound';
 import LoadingIndicator from '../common/LoadingIndicator';
 import PrivateRoute from '../common/PrivateRoute';
 import {RedoOutlined} from '@ant-design/icons';
-// import PrivateRoute2 from '../common/PrivateRoute2';
 import { notification,Affix,Card, Button } from 'antd';
 import { Layout } from 'antd';
 import NewGroup from '../group/NewGroup';
@@ -29,8 +26,6 @@ import EditGroup from '../group/EditGroup';
 import ChangePassword from '../user/ChangePassword';
 import Verification from '../user/Verification';
 const { Header, Sider, Content } = Layout;
-//const { Content } = Layout;
-
 const App = (props) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -157,119 +152,14 @@ const App = (props) => {
               <Route component={NotFound}></Route>
             </Switch>
           </div>
-        </Content>
+        </Content>{isAuthenticated&&
 <Affix className="affix" offsetTop={220}>
         <Card title={"Top "+toptag.length+" Tag rank"} style={{ width: 300}} extra={<Button type="text" shape="circle" className="poll-info" icon={<RedoOutlined />} onClick={loadTopTag}></Button>}>
       {tagViews}
-      {/* <p>{toptag[2].name}  Num: {toptag[2].count}</p>
-      <p>{toptag[3].name}  Num: {toptag[3].count}</p>
-      <p>{toptag[4].name}  Num: {toptag[4].count}</p> */}
     </Card>
-        </Affix>
+        </Affix>}
       </Layout>
     </Layout>
   );
 }
-
-
-// class App extends Component {
-//   constructor(props) {
-//     super(props);
-//     this.state = {
-//       currentUser: null,
-//       isAuthenticated: false,
-//       isLoading: false
-//     }
-//     this.handleLogout = this.handleLogout.bind(this);
-//     this.loadCurrentUser = this.loadCurrentUser.bind(this);
-//     this.handleLogin = this.handleLogin.bind(this);
-
-//     notification.config({
-//       placement: 'topRight',
-//       top: 70,
-//       duration: 3,
-//     });    
-//   }
-
-//   loadCurrentUser() {
-//     this.setState({
-//       isLoading: true
-//     });
-//     getCurrentUser()
-//     .then(response => {
-//       this.setState({
-//         currentUser: response,
-//         isAuthenticated: true,
-//         isLoading: false
-//       });
-//       console.log(this.state.isAuthenticated)
-//     }).catch(error => {
-//       this.setState({
-//         isLoading: false
-//       });  
-//     });
-//   }
-
-//   componentDidMount() {
-//     this.loadCurrentUser();
-//   }
-
-//   handleLogout(redirectTo="/", notificationType="success", description="You're successfully logged out.") {
-//     localStorage.removeItem(ACCESS_TOKEN);
-
-//     this.setState({
-//       currentUser: null,
-//       isAuthenticated: false
-//     });
-
-//     this.props.history.push(redirectTo);
-
-//     notification[notificationType]({
-//       message: 'Polling App',
-//       description: description,
-//     });
-//   }
-
-//   handleLogin() {
-//     notification.success({
-//       message: 'Polling App',
-//       description: "You're successfully logged in.",
-//     });
-//     this.loadCurrentUser();
-//     this.props.history.push("/");
-//   }
-
-//   render() {
-//     if(this.state.isLoading) {
-//       return <LoadingIndicator />
-//     }
-//     return (
-//         <Layout className="app-container">
-//           <AppHeader isAuthenticated={this.state.isAuthenticated} 
-//             currentUser={this.state.currentUser} 
-//             onLogout={this.handleLogout} />
-
-//           <Content className="app-content">
-//             <div className="container">
-//               <Switch>      
-//                 <Route exact path="/" 
-//                   render={(props) => <PostList isAuthenticated={this.state.isAuthenticated} 
-//                       currentUser={this.state.currentUser} handleLogout={this.handleLogout} {...props} />}>
-//                 </Route>
-//                 <Route path="/login" 
-//                   render={(props) => <Login onLogin={this.handleLogin} {...props} />}></Route>
-//                 <Route path="/signup" component={Signup}></Route>
-//                 <Route path="/users/:username" 
-//                   render={(props) => <Profile isAuthenticated={this.state.isAuthenticated} currentUser={this.state.currentUser} {...props}  />}>
-//                 </Route>
-//                 <PrivateRoute authenticated={this.state.isAuthenticated} path="/poll/new" component={NewPost} handleLogout={this.handleLogout}></PrivateRoute>
-//                 <Route component={NotFound}></Route>
-//               </Switch>
-//             </div>
-//           </Content>
-//         </Layout>
-//     );
-//   }
-// }
-
 export default withRouter(App);

@@ -239,7 +239,14 @@ export function login(loginRequest) {
         body: JSON.stringify(loginRequest)
     });
 }
-
+export function logingg(loginRequest) {
+    return request({
+        url: API_BASE_URL + "/auth/signingoogle",
+        method: 'POST',
+        body: loginRequest
+        // body: JSON.stringify(loginRequest)
+    });
+}
 export function signup(signupRequest) {
     return request({
         url: API_BASE_URL + "/auth/signup",
