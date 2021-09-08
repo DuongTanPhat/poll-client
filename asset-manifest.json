@@ -1,24 +1,24 @@
 {
   "files": {
     "main.css": "/poll-client/static/css/main.141eaf75.chunk.css",
-    "main.js": "/poll-client/static/js/main.c8d5b93e.chunk.js",
-    "main.js.map": "/poll-client/static/js/main.c8d5b93e.chunk.js.map",
+    "main.js": "/poll-client/static/js/main.d9f524e2.chunk.js",
+    "main.js.map": "/poll-client/static/js/main.d9f524e2.chunk.js.map",
     "runtime-main.js": "/poll-client/static/js/runtime-main.92481835.js",
     "runtime-main.js.map": "/poll-client/static/js/runtime-main.92481835.js.map",
     "static/css/2.c058e17a.chunk.css": "/poll-client/static/css/2.c058e17a.chunk.css",
-    "static/js/2.ea220e3c.chunk.js": "/poll-client/static/js/2.ea220e3c.chunk.js",
-    "static/js/2.ea220e3c.chunk.js.map": "/poll-client/static/js/2.ea220e3c.chunk.js.map",
+    "static/js/2.eff4cd5a.chunk.js": "/poll-client/static/js/2.eff4cd5a.chunk.js",
+    "static/js/2.eff4cd5a.chunk.js.map": "/poll-client/static/js/2.eff4cd5a.chunk.js.map",
     "index.html": "/poll-client/index.html",
     "static/css/2.c058e17a.chunk.css.map": "/poll-client/static/css/2.c058e17a.chunk.css.map",
     "static/css/main.141eaf75.chunk.css.map": "/poll-client/static/css/main.141eaf75.chunk.css.map",
-    "static/js/2.ea220e3c.chunk.js.LICENSE.txt": "/poll-client/static/js/2.ea220e3c.chunk.js.LICENSE.txt",
+    "static/js/2.eff4cd5a.chunk.js.LICENSE.txt": "/poll-client/static/js/2.eff4cd5a.chunk.js.LICENSE.txt",
     "static/media/poll.04e627bb.svg": "/poll-client/static/media/poll.04e627bb.svg"
   },
   "entrypoints": [
     "static/js/runtime-main.92481835.js",
     "static/css/2.c058e17a.chunk.css",
-    "static/js/2.ea220e3c.chunk.js",
+    "static/js/2.eff4cd5a.chunk.js",
     "static/css/main.141eaf75.chunk.css",
-    "static/js/main.c8d5b93e.chunk.js"
+    "static/js/main.d9f524e2.chunk.js"
   ]
 }
